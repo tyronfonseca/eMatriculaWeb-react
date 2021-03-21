@@ -1,0 +1,22 @@
+/* FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+
+/* Variables */
+:root{
+	/*=======COLORS=========*/
+	--primaryColor: #41ade7;
+	--secondaryColor: #114e8f;
+	--accentColor: #FCB727;
+	--primaryColorDarkTheme:white;
+	--secondaryColorDarkTheme:white;
+	--listColor:  rgba(112, 112, 112, .6);
+	--labelColor: rgba(112, 112, 112, 1);
+}
+
+*{
+	font-family:  'Manrope', sans-serif;
+}
+
+body{
+	background-color: white;
+}

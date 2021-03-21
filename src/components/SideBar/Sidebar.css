@@ -1,0 +1,86 @@
+:root{
+	--heighNavBar: 60px;
+}
+
+.sidebar{
+	height: var(--heighNavBar);
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	background-color: white;
+	border-bottom: 1px solid rgba(207, 190, 190, .65);
+}
+
+.sidebar-bars{	
+	margin-left: 2rem;
+	font-size: 2rem;	
+	background: none;
+}
+
+.sidebar-menu{
+	background-color: var(--primaryColor);
+	width: 250px;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: -100%;
+	transition: 850ms;
+	overflow-y: auto;
+}
+
+.sidebar-menu.active{
+	left: 0;
+	transition: 350ms;
+}
+
+.sidebar-item{
+	display: flex;
+	justify-content: last baseline;
+	align-items: center;
+	list-style: none;
+	height: 60px;
+	margin-bottom: .7rem;
+}
+
+.sidebar-item a{
+	text-decoration: none;
+	color: white;
+	font-size: 1rem;
+	width: 95%;
+	height: 100%;
+	display: flex;
+	align-items: center;	
+}
+
+.sidebar-item a:hover{
+	background-color: var(--accentColor);
+    -webkit-transition: background-color .3s ease-in;
+    -ms-transition: background-color .3s ease-in;
+    transition: background-color .3s ease-in;
+}
+
+.sidebar-item a svg{
+	margin-left: 8px;
+}
+
+.sidebar-menu-items{
+	width: 100%;
+	padding-left: 16px;
+}
+
+.sidebar-toggle{
+	display: flex;
+	width: 100%;
+	height: var(--heighNavBar);
+	justify-content: start;
+	align-items: center;
+	
+}
+
+li span{
+	margin-left: 16px;
+	padding-right: 8px;
+}
