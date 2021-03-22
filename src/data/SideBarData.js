@@ -6,7 +6,7 @@ const sizeIcon = 25;
 export const SideBarData = [
 	{
 		title: "Perfil",
-		path: "perfil",
+		path: "",
 		icon: <io.IoPersonOutline size={sizeIcon} />
 	},
 	{
@@ -36,7 +36,7 @@ export const SideBarData = [
 	},
 	{
 		title: "Salir",
-		path: "/",
+		path: "#",
 		icon: <io.IoLogOutOutline size={sizeIcon} />
 	}
 ];

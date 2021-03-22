@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
 	entry: __dirname  + '/src/index.js', //Archivo inicial
@@ -21,15 +22,18 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'dist/'),
 		publicPath: '/dist/',
-		filename: 'bundle.js'
+		filename: '[name].bundle.js'
 	},
 	resolve: {extensions: ['*', '.js', '.jsx']}, //Generar paths para archivos with the same name
 	devServer: {
 		contentBase: path.join(__dirname, 'public/'),
 		port: 8080,
-		publicPath: 'http://localhost:3030/dist/',
+		publicPath: 'http://localhost:8080/dist/',
 		hotOnly: true,
 		historyApiFallback: true
 	},
-	plugins: [new webpack.HotModuleReplacementPlugin()] //Enable hotloading
+	plugins: [
+		new webpack.HotModuleReplacementPlugin(),//Enable hotloading
+		new HtmlWebpackPlugin()
+	]
 };
