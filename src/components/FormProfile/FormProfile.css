@@ -1,0 +1,4 @@
+form label {
+	color: var(--labelColor);
+	padding-top: .48rem;
+}

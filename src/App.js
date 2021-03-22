@@ -14,9 +14,9 @@ import routes from './constants/routesSidebar'
 const App = () => {
 	return (		
 		<>
-			<Router>
-				<SideBar />
+			<Router>						
 				<Container fluid>
+					<SideBar />
 					<Row className="justify-content-center">
 						<Suspense fallback={<div>Cargando...</div>}>
 						<Switch>

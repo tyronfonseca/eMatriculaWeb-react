@@ -9,6 +9,7 @@
 	align-items: center;
 	background-color: white;
 	border-bottom: 1px solid rgba(207, 190, 190, .65);
+	margin-bottom: 16px;
 }
 
 .sidebar-bars{	
@@ -27,8 +28,9 @@
 	top: 0;
 	bottom: 0;
 	left: -100%;
-	transition: 850ms;
+	transition: 450ms;
 	overflow-y: auto;
+	z-index: 10;
 }
 
 .sidebar-menu.active{
@@ -71,6 +73,11 @@
 	padding-left: 16px;
 }
 
+.sidebar-item span{
+	margin-left: 16px;
+	padding-right: 8px;
+}
+
 .sidebar-toggle{
 	display: flex;
 	width: 100%;
@@ -80,7 +87,14 @@
 	
 }
 
-li span{
-	margin-left: 16px;
-	padding-right: 8px;
+.clock{
+	font-size: small; 
+	font-weight: 500;
+}
+
+.ciclo{
+	font-size: medium;
+	font-weight: 800;
+	color: var(--accentColor);
+	padding-left: 5px;
 }
