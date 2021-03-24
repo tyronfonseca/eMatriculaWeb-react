@@ -1,8 +1,11 @@
 import React from 'react';
 
-const Plan = () => {
+const nameView = 'Plan de Estudios';
+
+const Plan = (props) => {
 	React.useEffect(() => { //Equivalente a componentDidMount()
-		document.title = "Plan de Estudios - eMatricula"
+		document.title = nameView + " - eMatricula";
+		props.changeViewName(nameView);
 	}, []);
 
 

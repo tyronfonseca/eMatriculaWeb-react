@@ -90,6 +90,7 @@
 .clock{
 	font-size: small; 
 	font-weight: 500;
+	float: right;
 }
 
 .ciclo{

@@ -4,10 +4,16 @@ import Col from 'react-bootstrap/Col';
 import CardCustom from '../../CardCustom/Card';
 import FormProfile from '../../FormProfile/FormProfile';
 
-//TODO: Implementar el UI estatico
-const Perfil = () => {
+import studentMock from '../../../data/mockUser';
+
+
+const student = studentMock[0];
+const nameView = 'Perfil';
+
+const Perfil = (props) => {		
 	React.useEffect(() => { //Equivalente a componentDidMount()
-		document.title = "Perfil - eMatricula"
+		document.title =  nameView +" - eMatricula";	
+		props.changeViewName(nameView);
 	}, []);
 
 	return(		
@@ -17,15 +23,15 @@ const Perfil = () => {
 				<Col className="pb-4">
 					{CardCustom("Datos Institucionales",
 					 <ul className="list-clean">
-						<li>Carnet: <span id="carnet">B83007</span></li>
-						<li>Email: <span id="emailInstitucional">tyron.fonseca@ucr.ac.cr</span></li>
-						<li>Beca: <span id="beca">5 Beca Socioeconómica</span></li>
-						<li>Morosidad: <span id="morosidad">No posee morosidades</span></li>
+						<li>Carnet: <span id="carnet">{student.uniId}</span></li>
+						<li>Email: <span id="emailInstitucional">{student.uniEmail}</span></li>
+						<li>Beca: <span id="beca">{student.scholarship}</span></li>
+						<li>Morosidad: <span id="morosidad">{student.debt}</span></li>
 					</ul>
 					)}
 				</Col>
 				{/* <!-- Datos Ponderado --> */}
-				<Col>
+				<Col className="pb-4">
 					{CardCustom("Promedios Ponderados",
 						<ul className="list-clean">
 							<li>Promedio ponderado matricula I-2021: <span id="pondMatricula"><span style={{color: "green"}}>8.92</span>  con carga académica de 24 créditos</span></li>
@@ -34,9 +40,18 @@ const Perfil = () => {
 						</ul>
 					)}
 				</Col>
+				<Col className="pb-4">
+					{CardCustom("Carrera(s)",
+						<ul className="list-clean">
+						{student.careers.map((career, id) => (
+							<li key={id}>{career.name}</li>
+						))}
+						</ul>
+					)}
+				</Col>
 			</Col>
-			<Col sm={6}>				
-				{CardCustom("Datos Personales", FormProfile())}
+			<Col sm={6} className="pb-4">
+				{CardCustom("Datos Personales", FormProfile(student))}
 			</Col>
 		</>
 	);

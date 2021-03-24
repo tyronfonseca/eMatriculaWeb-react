@@ -1,8 +1,10 @@
 import React from 'react';
 
-const Horario = () => {
+const nameView = 'Horario';
+const Horario = (props) => {
 	React.useEffect(() => { //Equivalente a componentDidMount()
-		document.title = "Horario - eMatricula"
+		document.title = nameView + " - eMatricula";
+		props.changeViewName(nameView);
 	}, []);
 	return (
 		<div>

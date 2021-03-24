@@ -1,10 +1,11 @@
 import React from 'react';
 import {useLocation} from 'react-router-dom';
 
-const NotFound = () => {
+const NotFound = (props) => {
 	const location = useLocation();
 	React.useEffect(() => { //Equivalente a componentDidMount()
 		document.title = "404 - Contenido no encontrado"
+		props.changeViewName('');
 	}, []);
 
 	return (

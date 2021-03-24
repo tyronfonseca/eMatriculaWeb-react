@@ -1,8 +1,11 @@
 import React from 'react';
 
-const Matricula = () => {
+const nameView = 'Matricula';
+
+const Matricula = (props) => {
 	React.useEffect(() => { //Equivalente a componentDidMount()
-		document.title = "Matricula - eMatricula"
+		document.title = nameView + " - eMatricula";
+		props.changeViewName(nameView);
 	}, []);
 	return (
 		<div>

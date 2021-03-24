@@ -9,8 +9,7 @@ import {SideBarData} from '../../data/SideBarData';
 import SideBarItem from './SideBarItem';
 import clock from './clock';
 
-//TODO: display current View
-const SideBar = () => {	
+const SideBar = (props) => {	
 	const [sidebarActive, setSideBar] = useState(false);
 	const [time, setTime] = useState(clock());
 
@@ -24,11 +23,14 @@ const SideBar = () => {
 	return (
 		<>
 			<IconContext.Provider value={{color: '#fff'}}>
-				<div className="sidebar row justify-content-between">
-					<Link to="#" className="sidebar-bars col">
+				<div className="sidebar row justify-content-around">
+					<Link to="#" className="sidebar-bars col-1">
 						<IoMenuOutline onClick={showSidebar} style={{ color: 'black' }}/>
 					</Link>
-					<div className="col">
+					<div className="col-1">
+						<span className="text-muted">{props.nameView}</span>
+					</div>
+					<div className="col-6 text-center">
 						<img className="d-inline-block aling-top" src={require('../../img/ematriculaSmall.gif')} width="140" height="45" alt="Logo de eMatricula" />
 						<span className="ciclo">I-Ciclo 2021</span>
 					</div>

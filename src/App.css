@@ -30,5 +30,5 @@ body{
 	border: none;
 }
 .btn-main:hover{
-	color: var(--secondaryColor);
+	background-color: var(--secondaryColor);
 }

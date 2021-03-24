@@ -1,8 +1,11 @@
 import React from 'react';
 
-const Expediente = () => {
-	React.useEffect(() => { //Equivalente a componentDidMount()
-		document.title = "Expediente Académico - eMatricula"
+const nameView = 'Expediente Académico';
+
+const Expediente = (props) => {
+	React.useEffect(() => { //Equivalente a componentDidMount()		
+		document.title = nameView + " - eMatricula";
+		props.changeViewName(nameView);
 	}, []);
 	return (
 		<div>
