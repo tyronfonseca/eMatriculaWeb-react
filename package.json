@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.13",
+    "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "file-loader": "^6.2.0",
     "react": "^17.0.1",

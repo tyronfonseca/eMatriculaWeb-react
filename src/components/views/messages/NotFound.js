@@ -12,6 +12,7 @@ const NotFound = (props) => {
 		<div>
 			<h1>404 - Contenido no encontrado</h1>
 			<p>El link <code>{location.pathname}</code> es incorrecto.</p>
+			<img className="" src={require('../../../img/404.jpg')} width="200" height="200" alt="Imagen de error 404" />
 		</div>
 	);
 };

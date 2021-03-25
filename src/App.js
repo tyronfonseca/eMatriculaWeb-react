@@ -29,7 +29,7 @@ class App extends Component {
 					<Container fluid>
 						<SideBar nameView={this.state.viewName}/>
 						<Row className="justify-content-center">
-							<Suspense fallback={<div>Cargando...</div>}>
+							<Suspense fallback={<div>Cargando UI...</div>}>
 							<Switch>
 									{Object.values(routes).map(({ component: Cmp, ...route}) => (
 									<Route
