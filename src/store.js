@@ -5,10 +5,10 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
-import student from './redux/reducers/studentReducers';
+import student from './redux/reducers/studentReducer';
 
 const reducers = {
-	student
+	student,
 };
 
 const persistConfig = {

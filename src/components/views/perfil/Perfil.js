@@ -5,14 +5,15 @@ import Col from 'react-bootstrap/Col';
 import CardCustom from '../../CardCustom/Card';
 import FormProfile from '../../FormProfile/FormProfile';
 
-import {getStudentLoading, getStudent} from '../../../redux/selectors/selector';
-import {getStudentById} from '../../../redux/thunks/studentThunk';
+import {getStudentLoading, getStudent, getCourses} from '../../../redux/selectors/selector';
+import {getStudentById, getCoursesById} from '../../../redux/thunks/studentThunk';
 
 const nameView = 'Perfil';
 
-const Perfil = ({ isLoading, startLoadingStudent, student, changeViewName }) => {
+const Perfil = ({ isLoading, startLoadingStudent, startLoadingCourses, student, changeViewName }) => {
 	React.useEffect(() => { 
 		startLoadingStudent(1);
+		startLoadingCourses(1);
 		document.title =  nameView +" - eMatricula";	
 		changeViewName(nameView);		
 	}, []);
@@ -62,11 +63,13 @@ const Perfil = ({ isLoading, startLoadingStudent, student, changeViewName }) => 
 
 const mapStateToProps = state => ({
 	isLoading: getStudentLoading(state),
-	student: getStudent(state)
+	student: getStudent(state),
+	courses: getCourses(state),
 });
 
 const mapDispatchToProps = dispatch => ({
 	startLoadingStudent: (id) =>  dispatch(getStudentById(id)),
+	startLoadingCourses: (id) => dispatch(getCoursesById(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Perfil);

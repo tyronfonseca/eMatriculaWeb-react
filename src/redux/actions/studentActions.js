@@ -4,7 +4,8 @@ export const types = {
 	LOAD_STUDENT_FAILURE: 'LOAD_STUDENT_FAILURE',
 	LOAD_STUDENT_SUCCESS: 'LOAD_STUDENT_SUCCESS',
 	UPDATE_STUDENT: 'UPDATE_STUDENT',
-	DELETE_STUDENT: 'DELETE_STUDENT'
+	DELETE_STUDENT: 'DELETE_STUDENT',
+	LOAD_STUDENT_COURSES_SUCCESS: 'LOAD_STUDENT_COURSES_SUCCESS'
 }
 
 export const createStudent = student => ({
@@ -35,4 +36,9 @@ export const updateStudent = student => ({
 export const deleteStudent = student => ({
 	type: types.DELETE_STUDENT,
 	payload: { student }
+});
+
+export const loadStudentCoursesSuccess = courses => ({
+	type: types.LOAD_STUDENT_COURSES_SUCCESS,
+	payload: { courses }
 });

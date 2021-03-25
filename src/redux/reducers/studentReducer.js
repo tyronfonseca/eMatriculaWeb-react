@@ -1,20 +1,19 @@
 import {types as actions} from '../actions/studentActions';
 
-const initialState = {isLoading: false, data: []};
+const initialState = {isLoading: false, data: [], courses: []};
 
 
-export const student = (state = initialState, action) => {
+const student = (state = initialState, action) => {
 	const {type, payload} = action;
 	switch (type) {
 		case actions.CREATE_STUDENT:{
-			const {student} = payload;
+			const {data} = payload;
 			return {
 				...state,
-				data: state.data.concat(student)
+				data: state.student.data.concat(data)
 			};
 		}		
 		case actions.LOAD_STUDENT_IN_PROGRESS: {
-			const { student } = payload;
 			return {
 				...state,
 				isLoading: true
@@ -33,6 +32,15 @@ export const student = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
+			};
+		}
+		case actions.LOAD_STUDENT_COURSES_SUCCESS: {
+			const { courses } = payload;
+			return {
+
+				...state,
+				isLoading: false,
+				courses: courses,
 			};
 		}
 		default:

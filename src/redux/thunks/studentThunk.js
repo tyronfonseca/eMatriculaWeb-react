@@ -16,6 +16,19 @@ export const getStudentById = id => async(dispatch) => {
 	}
 }
 
+
+export const getCoursesById = id => async(dispatch) => {
+	try {
+		dispatch(actions.loadStudentInProgress());
+		const url = `${EMATRICULA_API}/courses/${id}`;
+		const response = await axios.get(url);
+		dispatch(actions.loadStudentCoursesSuccess(response.data));
+	} catch (error) {
+		dispatch(actions.loadStudentFailure());
+		dispatch(displayAlert(error));
+	}
+}
+
 export const displayAlert = text => () => {
 	alert(text);
 };
