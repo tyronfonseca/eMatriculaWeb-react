@@ -3,7 +3,7 @@ import React from 'react';
 const nameView = 'Plan de Estudios';
 
 const Plan = (props) => {
-	React.useEffect(() => { //Equivalente a componentDidMount()
+	React.useEffect(() => {
 		document.title = nameView + " - eMatricula";
 		props.changeViewName(nameView);
 	}, []);
