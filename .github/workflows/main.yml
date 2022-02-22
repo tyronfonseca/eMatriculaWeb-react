@@ -63,8 +63,8 @@ jobs:
       - run: npm install cypress
 
       # run the frontend server in background and wait for it to be available
-      - run: PORT=443 HTTPS=true npm ci &
-      - run: npx wait-on https://your.domain --timeout 180000
+      # - run: PORT=443 HTTPS=true npm ci &
+      # - run: npx wait-on https://your.domain --timeout 180000
 
       # the cypress docker doesn't contain jq, and we need it for easier parsing of json array string.
       # This could be improved in the future, but only adds ~2s to the build time
