@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive",
     "dev": "npx webpack serve --mode development",
-    "build": "npx webpack --mode production"
+    "build": "npx webpack --mode production",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "keywords": [
     "ematricula",
