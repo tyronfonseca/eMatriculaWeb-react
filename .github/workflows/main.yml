@@ -60,7 +60,7 @@ jobs:
 
       # in case cache is not valid, install the dependencies
       - run: npm ci
-      - run: npm run cypress install
+      - run: npm install cypress
 
       # run the frontend server in background and wait for it to be available
       - run: PORT=443 HTTPS=true npm ci &
