@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         # will be for eg chunk: [0,1]
-        chunk: [0,1,2,3]
+        chunk: ${{ fromJson(needs.setup.outputs['test-chunk-ids']) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
