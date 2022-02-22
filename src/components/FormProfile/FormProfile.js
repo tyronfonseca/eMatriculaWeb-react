@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-
 import './FormProfile.css';
 
-const FormProfile = (student) => {
+const FormProfile = ({student, updateStudent}) => {
+
+	const [provincia, setProvincia] = useState(student.province);
+
+	const onSumitHandler = event => {
+		event.preventDefault();
+		const newStudent = {...student, province: provincia};
+		updateStudent(newStudent);
+	};
+
 	return (
-		<Form>
+		<Form onSubmit={onSumitHandler}>
 			<input type="number" id="idStudent" hidden defaultValue={student.id}/>
 
 			<Form.Group controlId="formName">
@@ -48,7 +56,7 @@ const FormProfile = (student) => {
 			<Form.Row>
 				<Form.Group as={Col} controlId="provincia">
 					<Form.Label>Provincia</Form.Label>
-					<Form.Control aria-describedby="desProvinciaInput" placeholder="" defaultValue={student.province} />
+					<Form.Control aria-describedby="desProvinciaInput" placeholder="" value={provincia} onChange={(e) => setProvincia(e.target.value)}/>
 					<Form.Text className="d-none text-muted" id="desProvinciaInput">Provincia de residencia del estudiante</Form.Text>
 				</Form.Group>				
 				<Form.Group as={Col} controlId="tel2">

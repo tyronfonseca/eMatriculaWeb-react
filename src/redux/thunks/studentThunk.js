@@ -1,14 +1,11 @@
-import axios from 'axios';
-import CONNECTIONS from '../../config';
+import api, { EndPoints as EP } from '../../api/apiConection'
 import * as actions  from '../actions/studentActions';
 
-const {EMATRICULA_API} = CONNECTIONS;
 
 export const getStudentById = id => async(dispatch) => {
 	try{
 		dispatch(actions.loadStudentInProgress());
-		const url = `${EMATRICULA_API}/student/${id}`;
-		const response = await axios.get(url);		
+		const response = await api.get(`${EP.student}/${id}`);
 		dispatch(actions.loadStudentSuccess(response.data));
 	}catch(error){
 		dispatch(actions.loadStudentFailure());
@@ -20,8 +17,21 @@ export const getStudentById = id => async(dispatch) => {
 export const getCoursesById = id => async(dispatch) => {
 	try {
 		dispatch(actions.loadStudentInProgress());
-		const url = `${EMATRICULA_API}/courses/${id}`;
-		const response = await axios.get(url);
+		const response = await api.get(`${EP.courses}/${id}`);
+		dispatch(actions.loadStudentCoursesSuccess(response.data));
+	} catch (error) {
+		dispatch(actions.loadStudentFailure());
+		dispatch(displayAlert(error));
+	}
+}
+
+export const updateStudent = student => async (dispatch) => {
+	try {
+		dispatch(actions.loadStudentInProgress());
+		const headers = {
+			'Content-Type': 'application/json; charset=UTF-8'
+		};
+		const response = await api.put(`${EP.student}/${student.id}`, student, headers);
 		dispatch(actions.loadStudentCoursesSuccess(response.data));
 	} catch (error) {
 		dispatch(actions.loadStudentFailure());

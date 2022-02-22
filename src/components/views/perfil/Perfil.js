@@ -6,11 +6,11 @@ import CardCustom from '../../CardCustom/Card';
 import FormProfile from '../../FormProfile/FormProfile';
 
 import {getStudentLoading, getStudent, getCourses} from '../../../redux/selectors/selector';
-import {getStudentById, getCoursesById} from '../../../redux/thunks/studentThunk';
+import {getStudentById, getCoursesById, updateStudent} from '../../../redux/thunks/studentThunk';
 
 const nameView = 'Perfil';
 
-const Perfil = ({ isLoading, startLoadingStudent, startLoadingCourses, student, changeViewName }) => {
+const Perfil = ({ isLoading, startLoadingStudent, startLoadingCourses, startUpdateStudent, student, changeViewName }) => {
 	React.useEffect(() => { 
 		startLoadingStudent(1);
 		startLoadingCourses(1);
@@ -54,7 +54,7 @@ const Perfil = ({ isLoading, startLoadingStudent, startLoadingCourses, student, 
 	 			</Col>				
 	 		</Col>
 	 		<Col sm={6} className="pb-4">
-	 			{CardCustom("Datos Personales", FormProfile(student))}
+	 			{CardCustom("Datos Personales", <FormProfile student={student} updateStudent={startUpdateStudent} />)}
 	 		</Col>
 	 	</>
 	 );
@@ -70,6 +70,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	startLoadingStudent: (id) =>  dispatch(getStudentById(id)),
 	startLoadingCourses: (id) => dispatch(getCoursesById(id)),
+	startUpdateStudent: (studentParam) => dispatch(updateStudent(studentParam)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Perfil);
