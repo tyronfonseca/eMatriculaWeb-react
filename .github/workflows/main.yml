@@ -71,10 +71,12 @@ jobs:
       - run: apt-get install jq -y
 
       - name: Run Cypress
-        run: SPECS=$(echo $CHUNKS | jq -cMr '.[${{ matrix.chunk }}] | @text') && npx cypress run --spec $SPECS
+        run: SPECS=$(echo $CHUNKS | jq -cMr '.[${{ matrix.chunk }}] | @text')
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
           CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
+      - name: idk
+        run: echo $SPECS
 
   testsall:
     if: ${{ always() }}
