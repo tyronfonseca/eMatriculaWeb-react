@@ -5,9 +5,9 @@ name: Project
 # events but only for the master branch
 on:
   push:
-    branches: [cypress-test]
+    branches: cypress-test
   pull_request:
-    branches: [cypress-test]
+    branches: cypress-test
 
 jobs:
   setup:
