@@ -1,78 +1,86 @@
-name: Test CI
+# This is a basic workflow to help you get started with Actions
+name: Project
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
 on: [push]
+
 jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
+      # will contain a json string with an array of n elements, each being a string of spec files delimited by ,
       test-chunks: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+      # json string with ids to use in the next job matrix depending on how many elements are in the above array, eg: [0,1]
       test-chunk-ids: ${{ steps['set-test-chunk-ids'].outputs['test-chunk-ids'] }}
     steps:
       - uses: actions/checkout@v2
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache yarn cache
-        uses: actions/cache@v2
-        id: cache-yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-      - run: yarn --ignore-engines
-        if: |
-          steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
-          steps.cache-node-modules.outputs.cache-hit != 'true'
       - id: set-test-chunks
         name: Set Chunks
-        run: echo "::set-output name=test-chunks::$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | floor)]')"
+        # get all spec files from the integration directory, group them to be at most 15 at a time and transform them to json
+        run: echo "::set-output name=test-chunks::$(find cypress/integration -type f -name "*.spec.js" | xargs -n15 | tr ' ' ',' | jq -R . | jq -s -cM .)"
       - id: set-test-chunk-ids
         name: Set Chunk IDs
+        # get the number of elements from the above array as an array of indexes
         run: echo "::set-output name=test-chunk-ids::$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')"
         env:
           CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
-  test:
-    runs-on: ubuntu-latest
-    name: test (chunk ${{ matrix.chunk }})
+
+  tests:
     needs:
       - setup
+    runs-on: ubuntu-latest
+    container:
+      # use cypress image, since just using node 12 doesn't work currently for some reason, gives node-sass error
+      image: cypress/browsers:node12.13.0-chrome78-ff70
+      options: "--ipc=host" # fix for a cypress bug
+    name: test (chunk ${{ matrix.chunk }})
     strategy:
       matrix:
+        # will be for eg chunk: [0,1]
         chunk: ${{ fromJson(needs.setup.outputs['test-chunk-ids']) }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache yarn cache
-        uses: actions/cache@v2
-        id: cache-yarn-cache
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Add domain to hosts file
+        run: echo "127.0.0.1 your.domain" | tee -a /etc/hosts
+
+      # cache cypress and node_modules for faster operation
+      -  uses: actions/cache@v2
+         with:
+           path: '~/.cache/Cypress'
+           key: ${{ runner.os }}-cypress-${{ hashFiles('**/yarn.lock') }}
+
+      - uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
-      - run: yarn --ignore-engines
-        if: |
-          steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
-          steps.cache-node-modules.outputs.cache-hit != 'true'
-      - name: jest
-        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn jest
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-docker-${{ hashFiles('**/yarn.lock') }}
+
+      # in case cache is not valid, install the dependencies
+      - run: yarn --frozen-lockfile
+      - run: yarn run cypress install
+
+      # run the frontend server in background and wait for it to be available
+      - run: PORT=443 HTTPS=true yarn ci-start &
+      - run: npx wait-on https://your.domain --timeout 180000
+
+      # the cypress docker doesn't contain jq, and we need it for easier parsing of json array string.
+      # This could be improved in the future, but only adds ~2s to the build time
+      - run: apt-get install jq -y
+
+      - name: Run Cypress
+        run: SPECS=$(echo $CHUNKS | jq -cMr '.[${{ matrix.chunk }}] | @text') && yarn cypress:ci --spec $SPECS
         env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
           CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
+
+  testsall:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Tests All
+    needs: tests
+    steps:
+      - name: Check tests matrix status
+        if: ${{ needs.tests.result != 'success' }}
+        run: exit 1
