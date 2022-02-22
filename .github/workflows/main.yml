@@ -15,6 +15,7 @@ jobs:
       test-chunk-ids: ${{ steps['set-test-chunk-ids'].outputs['test-chunk-ids'] }}
     steps:
       - uses: actions/checkout@v2
+      - run: npm install
       - id: set-test-chunks
         name: Set Chunks
         # get all spec files from the integration directory, group them to be at most 15 at a time and transform them to json
@@ -50,19 +51,19 @@ jobs:
       -  uses: actions/cache@v2
          with:
            path: '~/.cache/Cypress'
-           key: ${{ runner.os }}-cypress-${{ hashFiles('**/yarn.lock') }}
+           key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
 
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-docker-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-docker-${{ hashFiles('**/package-lock.json') }}
 
       # in case cache is not valid, install the dependencies
-      - run: yarn --frozen-lockfile
-      - run: yarn run cypress install
+      - run: npm --frozen-lockfile
+      - run: npm run cypress install
 
       # run the frontend server in background and wait for it to be available
-      - run: PORT=443 HTTPS=true yarn ci-start &
+      - run: PORT=443 HTTPS=true npm ci &
       - run: npx wait-on https://your.domain --timeout 180000
 
       # the cypress docker doesn't contain jq, and we need it for easier parsing of json array string.
@@ -70,7 +71,7 @@ jobs:
       - run: apt-get install jq -y
 
       - name: Run Cypress
-        run: SPECS=$(echo $CHUNKS | jq -cMr '.[${{ matrix.chunk }}] | @text') && yarn cypress:ci --spec $SPECS
+        run: SPECS=$(echo $CHUNKS | jq -cMr '.[${{ matrix.chunk }}] | @text') && npm cypress:ci --spec $SPECS
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
           CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
