@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-modules-docker-${{ hashFiles('**/package-lock.json') }}
 
       # in case cache is not valid, install the dependencies
-      - run: npm --frozen-lockfile
+      - run: npm ci
       - run: npm run cypress install
 
       # run the frontend server in background and wait for it to be available
